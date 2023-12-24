@@ -48,7 +48,7 @@ export default function Home() {
   const [logs, setLogs] = useState<string[]>([]);
   const [successCount, setSuccessCount] = useState<number>(0);
   const [gasRadio, setGasRadio] = useState<GasRadio>("tip");
-  const gaslimit = 25000;
+  const gaslimit = 500000;
   const pushLog = useCallback((log: string, state?: string) => {
     setLogs((logs) => [
       handleLog(log, state),
