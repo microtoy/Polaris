@@ -48,7 +48,7 @@ export default function Home() {
   const [logs, setLogs] = useState<string[]>([]);
   const [successCount, setSuccessCount] = useState<number>(0);
   const [gasRadio, setGasRadio] = useState<GasRadio>("tip");
-
+  const gaslimit = 25000;
   const pushLog = useCallback((log: string, state?: string) => {
     setLogs((logs) => [
       handleLog(log, state),
@@ -65,8 +65,10 @@ export default function Home() {
   useInterval(
     async () => {
       const results = await Promise.allSettled(
-        accounts.map((account) => {
-          return client.sendTransaction({
+        accounts.map(async (account) => {
+          // Random delay between 1 to 10 seconds
+         //await new Promise(resolve => setTimeout(resolve, Math.random() * 9000 + 1000));
+          const transactionDetails = {
             account,
             to: radio === "meToMe" ? account.address : toAddress,
             value: 0n,
@@ -79,12 +81,20 @@ export default function Home() {
               ? gasRadio === "all"
                 ? {
                     gasPrice: parseEther(gas.toString(), "gwei"),
+                    gas: parseEther((gaslimit / 1e9).toString(), "gwei"),
                   }
                 : {
                     maxPriorityFeePerGas: parseEther(gas.toString(), "gwei"),
                   }
               : {}),
-          });
+          };
+
+            // Add your logic to show a confirmation dialog here
+            // For example, using a modal or dialog
+            // Once confirmed, call resolve(), otherwise call reject()
+            // Example:
+          //console.log('transactionDetails:', transactionDetails);
+          return client.sendTransaction(transactionDetails);
         }),
       );
       results.forEach((result, index) => {
