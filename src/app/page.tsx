@@ -74,7 +74,7 @@ export default function Home() {
             value: 0n,
             ...(inscription
               ? {
-                  data: stringToHex(inscription),
+                  //data: stringToHex(inscription),
                 }
               : {}),
             ...(gas > 0
@@ -84,7 +84,7 @@ export default function Home() {
                     gas: parseEther((gaslimit / 1e9).toString(), "gwei"),
                   }
                 : {
-                    maxPriorityFeePerGas: parseEther(gas.toString(), "gwei"),
+                    //maxPriorityFeePerGas: parseEther(gas.toString(), "gwei"),
                   }
               : {}),
           };
